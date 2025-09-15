@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Crop Recommendation</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: url('background.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+    .card {
+        background-color: rgba(255, 255, 255, 0.9);
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        text-align: center;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    label {
+        text-align: left;
+        font-weight: bold;
+    }
+    input {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    button {
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    .result {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #e7f3fe;
+        border-left: 4px solid #2196F3;
+    }
+    h3, h4 {
+        margin-top: 20px;
+    }
+    img {
+        margin: 10px 0;
+        border-radius: 8px;
+    }
+</style>
+</head>
+<body>
+<div class="card">
+    <h1>Crop Recommendation</h1>
+
+    <form method="POST" action="/predict">
+        <label>Nitrogen (N)</label>
+        <input type="number" step="any" name="N" required>
+
+        <label>Phosphorus (P)</label>
+        <input type="number" step="any" name="P" required>
+
+        <label>Potassium (K)</label>
+        <input type="number" step="any" name="K" required>
+
+        <label>Temperature (°C)</label>
+        <input type="number" step="any" name="temperature" required>
+
+        <label>Humidity (%)</label>
+        <input type="number" step="any" name="humidity" required>
+
+        <label>Soil pH</label>
+        <input type="number" step="any" name="ph" required>
+
+        <label>Rainfall (mm)</label>
+        <input type="number" step="any" name="rainfall" required>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction_text %}
+        <div class="result">{{ prediction_text }}</div>
+    {% endif %}
+
+    {% if active_scatter and active_bar and active_box %}
+        <h3>Crop Data Visualizations</h3>
+
+        <h4>Scatter Plot (N vs K)</h4>
+        <img src="active_scatter.png" style="width:100%; max-width:600px;">
+
+        <h4>Bar Chart (Average Feature Values)</h4>
+        <img src="active_box.png" style="width:100%; max-width:600px;">
+
+        <h4>Box Plot (pH Distribution)</h4>
+        <img src="active_bar.jpg-" style="width:100%; max-width:600px;">
+    {% endif %}
+
+    <h2>Correlation Heat‑map</h2>
+    <img src="{{ url_for('static', filename='heatmap.png') }}"
+         alt="Heat‑map" style="width:100%; max-width:600px;">
+</div>
+</body>
+</html>
